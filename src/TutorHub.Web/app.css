@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+     --tutor-primary: #F5A623;
+    --tutor-primary-light: #FFF4DF;
+    --tutor-primary-dark: #C07800;
+    --tutor-primary-text: #3D2500;
+    --tutor-blue: #3B6FD4;
+    --tutor-blue-light: #E8F1FF;
+    --tutor-green: #18A864;
+    --tutor-green-light: #E4FAF1;
+    --tutor-red: #E45252;
+    --tutor-red-light: #FCEAEA;
+    --tutor-surface: #F5F4F2;
+    --tutor-ink: #2C2010;
+    --tutor-ink-muted: #87817A;
+    --tutor-radius-sm: 10px;
+    --tutor-radius-md: 16px;
+    --tutor-radius-lg: 24px;
+    --tutor-radius-pill: 100px;
+}

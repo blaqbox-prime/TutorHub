@@ -5,12 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TutorHub.API.Data;
 using TutorHub.API.Models;
+using TutorHub.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddScoped<AuthService>();
 
 // Database configuration
 builder.Services.AddDbContext<AppDbContext>(options =>

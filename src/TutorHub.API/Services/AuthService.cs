@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using TutorHub.API.Exceptions;
 using TutorHub.API.Models;
 
 namespace TutorHub.API.Services
@@ -20,6 +21,11 @@ namespace TutorHub.API.Services
 
         public async Task<bool> RegisterUser(AppUser user, string password)
         {
+            var exists = await _userManager.FindByEmailAsync(user.Email);
+            if (exists != null)
+            {
+                throw new UserAlreadyExistsException("User already exists");
+            }
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)
             {

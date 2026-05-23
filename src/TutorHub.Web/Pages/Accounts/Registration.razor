@@ -1,69 +1,113 @@
 ﻿@page "/accounts/register"
+@using TutorHub.Web.Components
 @using TutorHub.Web.Models
+@inherits FlowbitePage
+@using Microsoft.AspNetCore.Components.Forms
+@using TutorHub.Web.Services
+@inject NavigationManager Navigation
+@inject AuthClient AuthClient
+
+<PageTitle>Register</PageTitle>
+
 
 <main class="flex h-screen w-screen flex-col items-center justify-center">
-    <div class="register-container flex rounded-2xl bg-white shadow-lg shadow-slate-300">
+    <div class="register-container overflow-clip h-[600px] w-2/3 flex rounded-2xl bg-white shadow-lg shadow-slate-500 transition-all duration-300 ease-in-out">
         @* left side *@
-        <div class="w-1/2 p-8">
+        <div class="w-1/2 p-8 relative">
             @* logo *@
             <div class="flex gap-2">
                 <img src="images/graduation-cap.svg" class="block h-5 w-5" alt="TutorHub Logo" />
                 <p class="text-sm font-black">TutorHub</p>
             </div>
-           
-            <EditForm Model="registerUserDetails" OnValidSubmit="HandleValidSubmitAsync">
-                <DataAnnotationsValidator />
-                <section>
-                    <h1 class="text-3xl font-bold">Create an account</h1>
-                    <h6 class="text-[10px] text-gray-300">Start your journey with professional tutoring simplified</h6>
-                </section>
-               <section class="flex flex-col">
-                    <div>
-                        <label TextColor="TextColor.Black50" RequiredIndicator Class="text-sm">Full Name</label>
-                        <InputText @bind-Value="registerUserDetails.FullName" Placeholder="Natasha Rosey" Class="bg-white" Size="Size.ExtraSmall">
-                            <p>First name and last name</p>
-                        </InputText>
-                    </div>
-                    <div>
-                        <label TextColor="TextColor.Black50" RequiredIndicator>Email</label>
-                        <InputText @bind-Value="@registerUserDetails.Email" Placeholder="natasha.rosey@example.com" Class="bg-white" Size="Size.Small">
-                            <p>We'll never share your email with anyone else</p>
-                        </InputText>
-                    </div>
-                    <div>
-                        <label TextColor="TextColor.Black50" RequiredIndicator>Password</label>
-                        <InputText @bind-Value="@registerUserDetails.Password" aria-placeholder="Create a strong password"
-                        aria-autocomplete="list" class="bg-white" >
-                            <p>Create a strong password</p>
-                        </InputText>
-                    </div>
-                    <div class="mt-4 flex items-center gap-2">
-                        <InputCheckbox @bind-Value="@agreedToTerms" />
-                        <label RequiredIndicator>I agree to the <span class="text-yellow-700">Terms and Conditions</span></label>
-                    </div>
-               </section>
 
-               <section class="flex flex-col gap-3">
-                    <button type="submit" disabled="!agreedToTerms">Sign Up</button>
-                    <button type="button"><span><img src="images/google.svg" class="mr-3 aspect-square w-4" alt="Google" /></span> Sign Up with Google</button>
-                    <p class="mt-4">Already have an account? <a href="/accounts/login" class="text-yellow-700 hover:underline">Log in</a></p>
-               </section>
+            <div class="z-50">
+                <EditForm Model=" registerUserDetails" OnValidSubmit="HandleValidSubmitAsync">
+                    <DataAnnotationsValidator />
+                    <section class="my-3">
+                        <h1 class="text-3xl font-bold">Create an account</h1>
+                        <h6 class="text-[10px] text-gray-500">Start your journey with professional tutoring simplified
+                        </h6>
+                    </section>
+                    <section class="flex flex-col gap-4">
+                        @* Server error *@
+                        @if (!string.IsNullOrEmpty(errorMessage)) {<p class="text-red-500 text-sm my-1 transition-all duration-300 ease-in-out">@errorMessage</p>}
 
-            </EditForm>
+                        @* FULL NAME *@
+                        <div>
+                            <label for="full_name" class="block mb-1 text-sm font-medium text-heading">Full Name</label>
+                            <input type="text" id="full_name" @bind="registerUserDetails.FullName"
+                                   class="bg-gray-200 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                   placeholder="John Wick" />
+                        <ValidationMessage For="@(() => registerUserDetails.FullName)" />
+
+                        </div>
+                        @* EMAIL *@
+                        <div>
+                            <label for="email" class="block mb-1 text-sm font-medium text-heading">Email</label>
+                            <input type="email" id="email" @bind="registerUserDetails.Email"
+                                   class="bg-gray-200 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                   placeholder="johnwick@example.com" />
+                <ValidationMessage For="@(() => registerUserDetails.Email)" />
+
+                        </div>
+                        @* PASSWORD *@
+                        <div>
+                            <label for="password" class="block mb-1 text-sm font-medium text-heading">Password</label>
+                            <input type="password" id="password" @bind="registerUserDetails.Password"
+                                   class="bg-gray-200 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                   placeholder="Enter a strong password" />
+                                   <ValidationMessage For="@(() => registerUserDetails.Password)" />
+                        </div>
+                    </section>
+
+                    <section class="flex flex-col gap-4 mt-3 items-center">
+                        <PrimaryButton ButtonType="submit" IsDisabled="@disabled" ClassName="w-full">Sign Up
+                        </PrimaryButton>
+                        <SecondaryButton ButtonType="button" IsDisabled="@disabled" ClassName="flex items-center justify-center gap-2 w-full">
+                            <span><img src="images/google.svg" class="mr-3 aspect-square w-4" alt="Google" /></span>
+                            Sign Up with Google
+                        </SecondaryButton>
+                        <p class="mt-4">Already have an account? <a href="/accounts/login"
+                                                                        class="text-yellow-700 hover:underline">Log in</a></p>
+                        </section>
+                    </EditForm>
+                </div>
+                @* bg-image *@
+                <img src="images/registration_bg.jpg"
+                     class="absolute z-0 top-0 left-0 opacity-5 h-full w-full object-cover rounded-r-2xl pointer-events-none"
+                     alt="Alternate Text" />
+            </div>
+            @* right side *@
+            <div class="w-1/2">
+                <img src="images/library.jpg" class="h-full w-full object-cover rounded-r-2xl" alt="Alternate Text" />
+            </div>
         </div>
-        @* right side *@
-        <div class="w-1/2">
-            <img src="images/library.jpg" class="h-full w-full object-cover" alt="Alternate Text" />
-        </div>
-    </div>
-</main>
+    </main>
 
 @code {
     private RegisterUserDetails? registerUserDetails = new RegisterUserDetails();
-    private bool agreedToTerms = false;
+    private bool disabled = false;
+    @* private string test = "test"; *@
+    private string errorMessage {get; set;} = string.Empty;
+
+
 
     private async Task HandleValidSubmitAsync()
     {
-        // Handle form submission logic here
+        disabled = true;
+        var result = await AuthClient.RegisterAsync(registerUserDetails);
+        if (result.IsSuccessStatusCode)
+        {
+            disabled = false;
+            registerUserDetails = new RegisterUserDetails();
+            errorMessage = string.Empty;
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            var registerResult = await result.Content.ReadFromJsonAsync<RegisterResponse>();
+            errorMessage = registerResult.Message;
+        }
+        disabled = false;
     }
 }

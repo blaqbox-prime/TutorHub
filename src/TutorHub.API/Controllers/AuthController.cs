@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TutorHub.API.DTO;
+using TutorHub.API.Exceptions;
 using TutorHub.API.Models;
 using TutorHub.API.Services;
 
@@ -33,7 +34,9 @@ namespace TutorHub.API.Controllers
                 Role = request.Role
             };
 
-            var registered = await _authService.RegisterUser(user, request.Password);
+            try
+            {
+                var registered = await _authService.RegisterUser(user, request.Password);
 
             if (!registered)
             {
@@ -41,6 +44,12 @@ namespace TutorHub.API.Controllers
             }
 
             return Ok(new { message = "User created successfully" });
+            }
+            catch (UserAlreadyExistsException ex)
+            {
+                
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

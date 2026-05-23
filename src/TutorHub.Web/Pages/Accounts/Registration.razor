@@ -1,6 +1,69 @@
-﻿@page "/accounts/registration"
-<h3>Registration</h3>
+﻿@page "/accounts/register"
+@using TutorHub.Web.Models
+
+<main class="flex h-screen w-screen flex-col items-center justify-center">
+    <div class="register-container flex rounded-2xl bg-white shadow-lg shadow-slate-300">
+        @* left side *@
+        <div class="w-1/2 p-8">
+            @* logo *@
+            <div class="flex gap-2">
+                <img src="images/graduation-cap.svg" class="block h-5 w-5" alt="TutorHub Logo" />
+                <p class="text-sm font-black">TutorHub</p>
+            </div>
+           
+            <EditForm Model="registerUserDetails" OnValidSubmit="HandleValidSubmitAsync">
+                <DataAnnotationsValidator />
+                <section>
+                    <h1 class="text-3xl font-bold">Create an account</h1>
+                    <h6 class="text-[10px] text-gray-300">Start your journey with professional tutoring simplified</h6>
+                </section>
+               <section class="flex flex-col">
+                    <div>
+                        <label TextColor="TextColor.Black50" RequiredIndicator Class="text-sm">Full Name</label>
+                        <InputText @bind-Value="registerUserDetails.FullName" Placeholder="Natasha Rosey" Class="bg-white" Size="Size.ExtraSmall">
+                            <p>First name and last name</p>
+                        </InputText>
+                    </div>
+                    <div>
+                        <label TextColor="TextColor.Black50" RequiredIndicator>Email</label>
+                        <InputText @bind-Value="@registerUserDetails.Email" Placeholder="natasha.rosey@example.com" Class="bg-white" Size="Size.Small">
+                            <p>We'll never share your email with anyone else</p>
+                        </InputText>
+                    </div>
+                    <div>
+                        <label TextColor="TextColor.Black50" RequiredIndicator>Password</label>
+                        <InputText @bind-Value="@registerUserDetails.Password" aria-placeholder="Create a strong password"
+                        aria-autocomplete="list" class="bg-white" >
+                            <p>Create a strong password</p>
+                        </InputText>
+                    </div>
+                    <div class="mt-4 flex items-center gap-2">
+                        <InputCheckbox @bind-Value="@agreedToTerms" />
+                        <label RequiredIndicator>I agree to the <span class="text-yellow-700">Terms and Conditions</span></label>
+                    </div>
+               </section>
+
+               <section class="flex flex-col gap-3">
+                    <button type="submit" disabled="!agreedToTerms">Sign Up</button>
+                    <button type="button"><span><img src="images/google.svg" class="mr-3 aspect-square w-4" alt="Google" /></span> Sign Up with Google</button>
+                    <p class="mt-4">Already have an account? <a href="/accounts/login" class="text-yellow-700 hover:underline">Log in</a></p>
+               </section>
+
+            </EditForm>
+        </div>
+        @* right side *@
+        <div class="w-1/2">
+            <img src="images/library.jpg" class="h-full w-full object-cover" alt="Alternate Text" />
+        </div>
+    </div>
+</main>
 
 @code {
+    private RegisterUserDetails? registerUserDetails = new RegisterUserDetails();
+    private bool agreedToTerms = false;
 
+    private async Task HandleValidSubmitAsync()
+    {
+        // Handle form submission logic here
+    }
 }

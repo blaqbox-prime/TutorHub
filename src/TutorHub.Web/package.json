@@ -1,6 +1,11 @@
 {
+  "scripts": {
+    "build:css": "tailwindcss -i ./wwwroot/css/input.css -o ./wwwroot/css/app.css --minify",
+    "watch:css": "tailwindcss -i ./wwwroot/css/input.css -o ./wwwroot/css/app.css --watch"
+  },
   "dependencies": {
     "@tailwindcss/cli": "^4.3.0",
+    "flowbite": "^4.0.2",
     "init": "^0.1.2"
   },
   "devDependencies": {

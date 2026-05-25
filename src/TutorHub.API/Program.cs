@@ -13,6 +13,7 @@ var config = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<TokenService>();
 
 // Database configuration
 builder.Services.AddDbContext<AppDbContext>(options =>

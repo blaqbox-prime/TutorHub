@@ -34,5 +34,7 @@ namespace TutorHub.API.Services
             await _userManager.AddToRoleAsync(user, user.Role);
             return true;
         }
+
+     
     }
 }

@@ -359,9 +359,8 @@
     --color-dark-subtle: var(--color-stone-800);
     --color-dark-backdrop: var(--color-stone-950);
     --color-primary: #835500;
-    --color-primary-container: #f5a623;
     --color-on-primary-container: #644000;
-    --color-inverse-primary: #ffb955;
+    --font-display-lg: Inter;
   }
 }
 @layer base {
@@ -917,9 +916,6 @@
   .my-3 {
     margin-block: calc(var(--spacing) * 3);
   }
-  .mt-1 {
-    margin-top: calc(var(--spacing) * 1);
-  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
@@ -928,6 +924,15 @@
   }
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
+  }
+  .mt-5 {
+    margin-top: calc(var(--spacing) * 5);
+  }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+  .mt-8 {
+    margin-top: calc(var(--spacing) * 8);
   }
   .apexcharts-canvas {
     & .apexcharts-tooltip {
@@ -1353,11 +1358,20 @@
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
-  .h-\[550px\] {
-    height: 550px;
+  .h-7 {
+    height: calc(var(--spacing) * 7);
+  }
+  .h-\[00px\] {
+    height: 00px;
   }
   .h-\[600px\] {
     height: 600px;
+  }
+  .h-\[650px\] {
+    height: 650px;
+  }
+  .h-\[800px\] {
+    height: 800px;
   }
   .h-\[calc\(100\%-1rem\)\] {
     height: calc(100% - 1rem);
@@ -1460,11 +1474,20 @@
   .w-5 {
     width: calc(var(--spacing) * 5);
   }
+  .w-7 {
+    width: calc(var(--spacing) * 7);
+  }
   .w-44 {
     width: calc(var(--spacing) * 44);
   }
   .w-64 {
     width: calc(var(--spacing) * 64);
+  }
+  .w-\[80\%\] {
+    width: 80%;
+  }
+  .w-\[90\%\] {
+    width: 90%;
   }
   .w-full {
     width: 100%;
@@ -1602,6 +1625,9 @@
   }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
+  }
+  .gap-5 {
+    gap: calc(var(--spacing) * 5);
   }
   .space-y-6 {
     :where(& > :not(:last-child)) {
@@ -2018,6 +2044,12 @@
   .text-center {
     text-align: center;
   }
+  .font-display-lg {
+    font-family: var(--font-display-lg);
+  }
+  .font-sans {
+    font-family: var(--font-sans);
+  }
   .text-3xl {
     font-size: var(--text-3xl);
     line-height: var(--tw-leading, var(--text-3xl--line-height));
@@ -2146,9 +2178,6 @@
     .datatable-wrapper .datatable-table thead th& .datatable-sorter {
       color: var(--color-heading);
     }
-  }
-  .text-black {
-    color: var(--color-black);
   }
   .text-body {
     color: var(--color-body);
@@ -2416,6 +2445,31 @@
   .md\:inset-0 {
     @media (width >= 48rem) {
       inset: calc(var(--spacing) * 0);
+    }
+  }
+  .md\:block {
+    @media (width >= 48rem) {
+      display: block;
+    }
+  }
+  .md\:h-\[600px\] {
+    @media (width >= 48rem) {
+      height: 600px;
+    }
+  }
+  .md\:w-1\/2 {
+    @media (width >= 48rem) {
+      width: calc(1 / 2 * 100%);
+    }
+  }
+  .md\:w-2\/3 {
+    @media (width >= 48rem) {
+      width: calc(2 / 3 * 100%);
+    }
+  }
+  .lg\:w-2\/3 {
+    @media (width >= 64rem) {
+      width: calc(2 / 3 * 100%);
     }
   }
   .rtl\:rotate-180 {

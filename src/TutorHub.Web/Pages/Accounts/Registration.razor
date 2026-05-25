@@ -11,24 +11,24 @@
 
 
 <main class="flex h-screen w-screen flex-col items-center justify-center">
-    <div class="register-container overflow-clip h-[600px] w-2/3 flex rounded-2xl bg-white shadow-lg shadow-slate-500 transition-all duration-300 ease-in-out">
+    <div class="register-container overflow-clip w-[90%] h-[650px] lg:w-2/3 flex rounded-2xl bg-white shadow-lg shadow-slate-500 transition-all duration-300 ease-in-out">
         @* left side *@
-        <div class="w-1/2 p-8 relative">
+        <div class="w-full md:w-1/2 p-8 relative">
             @* logo *@
             <div class="flex gap-2">
-                <img src="images/graduation-cap.svg" class="block h-5 w-5" alt="TutorHub Logo" />
-                <p class="text-sm font-black">TutorHub</p>
+                <img src="images/graduation-cap.svg" class="block h-7 w-7" alt="TutorHub Logo" />
+                <p class="font-black font-sans">TutorHub</p>
             </div>
 
             <div class="z-50">
                 <EditForm Model=" registerUserDetails" OnValidSubmit="HandleValidSubmitAsync">
                     <DataAnnotationsValidator />
                     <section class="my-3">
-                        <h1 class="text-3xl font-bold">Create an account</h1>
-                        <h6 class="text-[10px] text-gray-500">Start your journey with professional tutoring simplified
+                        <h1 class="text-4xl font-bold font-display-lg">Create an account</h1>
+                        <h6 class="text-sm text-gray-500">Start your journey with professional tutoring simplified
                         </h6>
                     </section>
-                    <section class="flex flex-col gap-4">
+                    <section class="flex flex-col gap-5 mt-8">
                         @* Server error *@
                         @if (!string.IsNullOrEmpty(errorMessage)) {<p class="text-red-500 text-sm my-1 transition-all duration-300 ease-in-out">@errorMessage</p>}
 
@@ -60,7 +60,7 @@
                         </div>
                     </section>
 
-                    <section class="flex flex-col gap-4 mt-3 items-center">
+                    <section class="flex flex-col gap-4 mt-8 items-center">
                         <PrimaryButton ButtonType="submit" IsDisabled="@disabled" ClassName="w-full">Sign Up
                         </PrimaryButton>
                         <SecondaryButton ButtonType="button" IsDisabled="@disabled" ClassName="flex items-center justify-center gap-2 w-full">
@@ -78,7 +78,7 @@
                      alt="Alternate Text" />
             </div>
             @* right side *@
-            <div class="w-1/2">
+            <div class="hidden md:block md:w-1/2">
                 <img src="images/library.jpg" class="h-full w-full object-cover rounded-r-2xl" alt="Alternate Text" />
             </div>
         </div>

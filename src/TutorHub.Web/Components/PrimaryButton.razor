@@ -1,0 +1,10 @@
+<button type="@ButtonType" disabled="@IsDisabled"
+        class="text-white bg-primary box-border border border-transparent hover:bg-on-primary-container focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none @ClassName">@ChildContent</button>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public bool IsDisabled { get; set; } = false;
+
+    [Parameter] public string ButtonType { get; set; } = "button";
+    [Parameter] public string ClassName {get; set;} = string.Empty;
+}

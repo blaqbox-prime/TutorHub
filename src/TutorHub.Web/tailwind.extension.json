@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/theron-wang/Tailwind-CSS-for-Visual-Studio/refs/heads/main/tailwind.extension.schema.json",
   "BuildFiles": [
     {
-      "Input": "..\\tutorhub.web\\app.css",
+      "Input": "wwwroot\\css\\input.css",
       "Output": "",
       "Behavior": "Default"
     }

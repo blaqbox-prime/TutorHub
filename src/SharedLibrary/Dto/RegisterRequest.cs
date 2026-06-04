@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TutorHub.API.DTO
-{
+namespace SharedLibrary.DTO;
+
     public readonly struct RegisterRequest(string fullName, string role, string email, string password)
     {
         [MinLength(5)]
@@ -15,4 +15,4 @@ namespace TutorHub.API.DTO
         [MaxLength(16)]
         public required string Password { get; init; } = password;
     }
-}
+

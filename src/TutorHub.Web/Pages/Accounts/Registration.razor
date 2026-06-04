@@ -6,61 +6,62 @@
 @using TutorHub.Web.Services
 @inject NavigationManager Navigation
 @inject AuthClient AuthClient
+@using SharedLibrary.DTO
 
 <PageTitle>Register</PageTitle>
 
 
 <main class="flex h-screen w-screen flex-col items-center justify-center">
-    <div class="register-container overflow-clip w-[90%] h-[650px] lg:w-2/3 flex rounded-2xl bg-white shadow-lg shadow-slate-500 transition-all duration-300 ease-in-out">
+    <div class="register-container flex h-[650px] w-[90%] overflow-clip rounded-2xl bg-white shadow-lg shadow-slate-500 transition-all duration-300 ease-in-out lg:w-2/3">
         @* left side *@
-        <div class="w-full md:w-1/2 p-8 relative">
+        <div class="relative w-full p-8 md:w-1/2">
             @* logo *@
             <div class="flex gap-2">
                 <img src="images/graduation-cap.svg" class="block h-7 w-7" alt="TutorHub Logo" />
-                <p class="font-black font-sans">TutorHub</p>
+                <p class="font-sans font-black">TutorHub</p>
             </div>
 
             <div class="z-50">
                 <EditForm Model=" registerUserDetails" OnValidSubmit="HandleValidSubmitAsync">
                     <DataAnnotationsValidator />
                     <section class="my-3">
-                        <h1 class="text-4xl font-bold font-display-lg">Create an account</h1>
+                        <h1 class="font-display-lg text-4xl font-bold">Create an account</h1>
                         <h6 class="text-sm text-gray-500">Start your journey with professional tutoring simplified
                         </h6>
                     </section>
-                    <section class="flex flex-col gap-5 mt-8">
+                    <section class="mt-8 flex flex-col gap-5">
                         @* Server error *@
-                        @if (!string.IsNullOrEmpty(errorMessage)) {<p class="text-red-500 text-sm my-1 transition-all duration-300 ease-in-out">@errorMessage</p>}
+                        @if (!string.IsNullOrEmpty(errorMessage)) {<p class="my-1 text-sm text-red-500 transition-all duration-300 ease-in-out">@errorMessage</p>}
 
                         @* FULL NAME *@
                         <div>
-                            <label for="full_name" class="block mb-1 text-sm font-medium text-heading">Full Name</label>
+                            <label for="full_name" class="text-heading mb-1 block text-sm font-medium">Full Name</label>
                             <input type="text" id="full_name" @bind="registerUserDetails.FullName"
-                                   class="bg-gray-200 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                   class="border-default-medium text-heading rounded-base shadow-xs block w-full border bg-gray-200 px-3 py-2.5 text-sm placeholder:text-body focus:ring-brand focus:border-brand"
                                    placeholder="John Wick" />
                         <ValidationMessage For="@(() => registerUserDetails.FullName)" />
 
                         </div>
                         @* EMAIL *@
                         <div>
-                            <label for="email" class="block mb-1 text-sm font-medium text-heading">Email</label>
+                            <label for="email" class="text-heading mb-1 block text-sm font-medium">Email</label>
                             <input type="email" id="email" @bind="registerUserDetails.Email"
-                                   class="bg-gray-200 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                   class="border-default-medium text-heading rounded-base shadow-xs block w-full border bg-gray-200 px-3 py-2.5 text-sm placeholder:text-body focus:ring-brand focus:border-brand"
                                    placeholder="johnwick@example.com" />
                 <ValidationMessage For="@(() => registerUserDetails.Email)" />
 
                         </div>
                         @* PASSWORD *@
                         <div>
-                            <label for="password" class="block mb-1 text-sm font-medium text-heading">Password</label>
+                            <label for="password" class="text-heading mb-1 block text-sm font-medium">Password</label>
                             <input type="password" id="password" @bind="registerUserDetails.Password"
-                                   class="bg-gray-200 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                                   class="border-default-medium text-heading rounded-base shadow-xs block w-full border bg-gray-200 px-3 py-2.5 text-sm placeholder:text-body focus:ring-brand focus:border-brand"
                                    placeholder="Enter a strong password" />
                                    <ValidationMessage For="@(() => registerUserDetails.Password)" />
                         </div>
                     </section>
 
-                    <section class="flex flex-col gap-4 mt-8 items-center">
+                    <section class="mt-8 flex flex-col items-center gap-4">
                         <PrimaryButton ButtonType="submit" IsDisabled="@disabled" ClassName="w-full">Sign Up
                         </PrimaryButton>
                         <SecondaryButton ButtonType="button" IsDisabled="@disabled" ClassName="flex items-center justify-center gap-2 w-full">
@@ -74,12 +75,12 @@
                 </div>
                 @* bg-image *@
                 <img src="images/registration_bg.jpg"
-                     class="absolute z-0 top-0 left-0 opacity-5 h-full w-full object-cover rounded-r-2xl pointer-events-none"
+                     class="pointer-events-none absolute top-0 left-0 z-0 h-full w-full rounded-r-2xl object-cover opacity-5"
                      alt="Alternate Text" />
             </div>
             @* right side *@
             <div class="hidden md:block md:w-1/2">
-                <img src="images/library.jpg" class="h-full w-full object-cover rounded-r-2xl" alt="Alternate Text" />
+                <img src="images/library.jpg" class="h-full w-full rounded-r-2xl object-cover" alt="Alternate Text" />
             </div>
         </div>
     </main>
@@ -101,12 +102,15 @@
             disabled = false;
             registerUserDetails = new RegisterUserDetails();
             errorMessage = string.Empty;
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("/accounts/onboarding");
         }
         else
         {
-            var registerResult = await result.Content.ReadFromJsonAsync<RegisterResponse>();
-            errorMessage = registerResult.Message;
+            var registerResult = await result.Content.ReadFromJsonAsync<ApiResponse>();
+            if (!string.IsNullOrEmpty(registerResult!.Error))
+            {
+                errorMessage = registerResult.Error;
+            }
         }
         disabled = false;
     }

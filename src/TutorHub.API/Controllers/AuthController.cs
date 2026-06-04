@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using TutorHub.API.DTO;
+using SharedLibrary.Dto;
+using SharedLibrary.DTO;
 using TutorHub.API.Exceptions;
 using TutorHub.API.Models;
 using TutorHub.API.Services;
@@ -44,13 +45,14 @@ namespace TutorHub.API.Controllers
 
                 if (!registered)
                 {
-                    return BadRequest(new { message = "Failed to create user" });
+                    return BadRequest(new ApiResponse { Data = null, Error = "Failed to create user"});
                 }
 
                 var roles = new List<string>{user.Role};
                 var token = _tokenService.GenerateToken(user,roles);
 
-                return Ok(new { token, expiresAt = DateTime.UtcNow.AddMinutes(60) });
+                AuthResponse authRes = new AuthResponse { Token = token, ExpiresAt = DateTime.UtcNow.AddMinutes(60) };
+                return Ok(new ApiResponse { Message = "Registered Successfully", Data = authRes});
             }
             catch (UserAlreadyExistsException ex)
             {

@@ -7,7 +7,7 @@ namespace TutorHub.Web.Models
 {
     public class RegisterResponse
     {
-        public string Message { get; set; }
+        public string? Message { get; set; }
     
     }
 }

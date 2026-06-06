@@ -20,8 +20,6 @@ namespace TutorHub.Web.Models
         public string Password { get; set; }
         public string Role { get; set; } = "Tutor";
 
-        public RegisterUserDetails() { }
-
         public RegisterUserDetails(string fullName, string email, string password, string role)
         {
             FullName = fullName;

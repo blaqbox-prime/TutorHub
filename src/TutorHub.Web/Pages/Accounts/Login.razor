@@ -89,7 +89,7 @@
     private async Task HandleValidSubmitAsync()
     {
         disabled = true;
-        var result = await AuthClient.LoginAsync(loginDetails);
+        var result = await AuthClient.LoginAsync(loginDetails!);
         var loginResult = await result.Content.ReadFromJsonAsync<ApiResponse<AuthResponse>>();
         if (result.IsSuccessStatusCode)
         {

@@ -30,7 +30,7 @@ namespace TutorHub.Web.Services
         }
 
         // Refresh token
-        public async Task<HttpResponseMessage> RefreshTokenAsync(string refreshToken)
+        public async Task<HttpResponseMessage> RefreshTokenAsync()
         {
             return await _http.PostAsync("auth/refresh", null);
         }

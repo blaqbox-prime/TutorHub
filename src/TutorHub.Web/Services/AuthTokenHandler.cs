@@ -31,7 +31,7 @@ public class AuthTokenHandler : DelegatingHandler
             var refreshToken = await _tokenService.GetRefreshTokenAsync();
             if (!string.IsNullOrEmpty(refreshToken))
             {
-                var refreshResponse = await _authClient.RefreshTokenAsync(refreshToken);
+                var refreshResponse = await _authClient.RefreshTokenAsync();
                 if (refreshResponse.IsSuccessStatusCode)
                 {
                     var newTokens = await refreshResponse.Content.ReadFromJsonAsync<AuthResponse>();

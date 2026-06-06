@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using TutorHub.Web;
@@ -28,9 +29,15 @@ builder.Services.AddHttpClient<ApiClient>(client =>
 .AddHttpMessageHandler<AuthTokenHandler>() // <-- ADD YOUR HANDLER HERE
 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
 {
-    UseDefaultCredentials = true 
+    UseDefaultCredentials = true
 });
 
+builder.Services.AddScoped<JwtAuthenticationProvider>();
+
+builder.Services.AddScoped<AuthenticationStateProvider>(
+    sp => sp.GetRequiredService<JwtAuthenticationProvider>());
+
+builder.Services.AddAuthorizationCore();
 
 
 await builder.Build().RunAsync();

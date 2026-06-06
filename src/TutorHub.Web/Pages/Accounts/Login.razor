@@ -1,0 +1,115 @@
+@page "/accounts/login"
+@inherits FlowbitePage
+@using TutorHub.Web.Components
+@using TutorHub.Web.Components.Form
+@using TutorHub.Web.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using SharedLibrary.DTO
+@using TutorHub.Web.Services
+@using Mapster;
+@using System.Text.Json;
+@inject NavigationManager Navigation
+@inject AuthClient AuthClient
+@inject TokenService TokenService
+
+<main class="flex h-screen w-screen flex-col items-center justify-center">
+    <div class="register-container flex h-[650px] w-[90%] overflow-clip rounded-2xl bg-white shadow-lg shadow-slate-500 transition-all duration-300 ease-in-out lg:w-2/3">
+        @* left side *@
+        <div class="relative w-full p-8 md:w-1/2">
+            @* logo *@
+            <div class="flex gap-2">
+                <img src="images/graduation-cap.svg" class="block h-7 w-7" alt="TutorHub Logo" />
+                <p class="font-sans font-black">TutorHub</p>
+            </div>
+
+            <div class="z-50">
+                <EditForm Model=" loginDetails" OnValidSubmit="HandleValidSubmitAsync">
+                    <DataAnnotationsValidator />
+                    <section class="my-2">
+                        <h1 class="font-display-lg text-4xl font-bold">Sign In</h1>
+                        <h6 class="text-sm text-gray-500 mt-4">Welcome back! Please enter your credentials to access your account.
+                        </h6>
+                    </section>
+                    <section class="mt-6 flex flex-col gap-5">
+                        @* Server error *@
+                        @if (!string.IsNullOrEmpty(errorMessage)) {<p class="my-1 text-sm text-red-500 transition-all duration-300 ease-in-out">@errorMessage</p>}
+
+                        @* EMAIL *@
+                        <div>
+                            <TextFormField type="email" id="email" label="Email" placeholder="johnwick@example.com" @bind-Value="@loginDetails!.Email"/>
+                            <ValidationMessage For="@(() => loginDetails.Email)" />
+                        </div>
+                        @* PASSWORD *@
+                        <div>
+                            <TextFormField type="password" id="password" label="Password" placeholder="Enter a strong password" @bind-Value="@loginDetails!.Password" />
+                            <ValidationMessage For="@(() => loginDetails.Password)" />
+                        </div>
+                    </section>
+
+                    <section class="mt-6 flex items-center justify-between gap-4">
+                        @* remember me *@
+                        <CheckboxFormField id="remember_me" text="Remember for 7 days" isChecked="@RememberMe"/>
+                        @* Forgot password *@
+                        <a href="/accounts/forgot-password" class="text-sm text-yellow-700 hover:underline">Forgot password?</a>
+                    </section>
+
+                    <section class="mt-6 flex flex-col items-center gap-4">
+                        <PrimaryButton ButtonType="submit" IsDisabled="@disabled" ClassName="w-full font-bold">Sign In
+                        </PrimaryButton>
+                        <SecondaryButton ButtonType="button" IsDisabled="@disabled" ClassName="flex items-center justify-center gap-2 w-full">
+                            <span><img src="images/google.svg" class="mr-3 aspect-square w-4" alt="Google" /></span>
+                            Sign In with Google
+                        </SecondaryButton>
+                        <p class="mt-4">Don't have an account? <a href="/accounts/register"
+                                                                        class="text-yellow-700 hover:underline">Sign up for free!</a></p>
+                        </section>
+                    </EditForm>
+                </div>
+                @* bg-image *@
+                <img src="images/registration_bg.jpg"
+                     class="pointer-events-none absolute top-0 left-0 z-0 h-full w-full rounded-r-2xl object-cover opacity-5"
+                     alt="Alternate Text" />
+            </div>
+            @* right side *@
+            <div class="hidden md:block md:w-1/2">
+                <img src="images/library.jpg" class="h-full w-full rounded-r-2xl object-cover" alt="Alternate Text" />
+            </div>
+        </div>
+    </main>
+
+@code {
+
+    private LoginRequest? loginDetails = new LoginRequest();
+    private bool disabled = false;
+    private bool RememberMe { get; set; } = false;
+    private string errorMessage {get; set;} = string.Empty;
+
+    private async Task HandleValidSubmitAsync()
+    {
+        disabled = true;
+        var result = await AuthClient.LoginAsync(loginDetails);
+        var loginResult = await result.Content.ReadFromJsonAsync<ApiResponse<AuthResponse>>();
+        if (result.IsSuccessStatusCode)
+        {
+            disabled = false;
+           
+            AuthResponse authResponse = loginResult!.Data!;
+            await TokenService.setJwtDetailsAsync(authResponse.Token, authResponse.ExpiresAt);
+            
+            //clean up form
+            loginDetails = new LoginRequest();
+            errorMessage = string.Empty;
+            RememberMe = false;
+            //navigate to dashboard
+            Navigation.NavigateTo("/dashboard");
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(loginResult!.Error))
+            {
+                errorMessage = loginResult.Error;
+            }
+        }
+        disabled = false;
+    }
+}

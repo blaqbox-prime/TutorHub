@@ -88,7 +88,6 @@
 @code {
     private RegisterUserDetails? registerUserDetails = new RegisterUserDetails();
     private bool disabled = false;
-    @* private string test = "test"; *@
     private string errorMessage {get; set;} = string.Empty;
 
 
@@ -106,7 +105,7 @@
         }
         else
         {
-            var registerResult = await result.Content.ReadFromJsonAsync<ApiResponse>();
+            var registerResult = await result.Content.ReadFromJsonAsync<ApiResponse<AuthResponse>>();
             if (!string.IsNullOrEmpty(registerResult!.Error))
             {
                 errorMessage = registerResult.Error;

@@ -62,7 +62,8 @@ builder.Services.AddCors(options =>
                 "https://localhost:7180"   // Vite / React
             )
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 
     options.AddPolicy("Production", policy =>
@@ -70,7 +71,7 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(config.GetSection("Cors:Origins").Get<string>() ?? throw new InvalidOperationException("Cors origins not configured"))
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod().AllowCredentials();
     });
 });
 

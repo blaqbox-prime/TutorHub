@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SharedLibrary.Models;
 using TutorHub.API.Models;
 
 namespace TutorHub.API.Data
@@ -8,5 +9,6 @@ namespace TutorHub.API.Data
     {
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Tutor> Tutors { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }

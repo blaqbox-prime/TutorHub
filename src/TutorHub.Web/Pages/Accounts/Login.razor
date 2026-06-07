@@ -13,14 +13,10 @@
 
 
 <main class="flex h-screen w-screen flex-col items-center justify-center">
-    <div class="register-container flex h-[650px] w-[90%] overflow-clip rounded-2xl bg-white shadow-lg shadow-slate-500 transition-all duration-300 ease-in-out lg:w-2/3">
+    <div class="register-container flex h-162.5 w-[90%] overflow-clip rounded-2xl bg-white shadow-lg shadow-slate-500 transition-all duration-300 ease-in-out lg:w-2/3">
         @* left side *@
         <div class="relative w-full p-8 md:w-1/2">
-            @* logo *@
-            <div class="flex gap-2">
-                <img src="images/graduation-cap.svg" class="block h-7 w-7" alt="TutorHub Logo" />
-                <p class="font-sans font-black">TutorHub</p>
-            </div>
+           <Logo />
 
             <div class="z-50">
                 <EditForm Model=" loginDetails" OnValidSubmit="HandleValidSubmitAsync">

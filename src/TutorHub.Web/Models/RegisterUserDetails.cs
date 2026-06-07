@@ -27,5 +27,9 @@ namespace TutorHub.Web.Models
             Password = password;
             Role = role;
         }
+
+        public RegisterUserDetails()
+        {
+        }
     }
 }

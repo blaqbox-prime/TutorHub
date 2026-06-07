@@ -1,0 +1,15 @@
+@inherits LayoutComponentBase
+<div class="h-screen w-screen bg-gray-50 overflow-x-hidden flex">
+    <div class="hidden md:flex md:flex-col w-2/12 h-screen bg-on-primary-container p-6">
+        <Logo />
+         <nav class="mt-10 flex flex-col gap-6">
+            <a href="/" class="text-white hover:text-heading transition-colors duration-300 ease-in-out">Dashboard</a>
+            <a href="/about" class="text-white hover:text-heading transition-colors duration-300 ease-in-out">Students</a>
+            <a href="/contact" class="text-white hover:text-heading transition-colors duration-300 ease-in-out">Subjects</a>
+        </nav>
+
+    </div>
+    <main class="flex-1 max-h-screen overflow-y-scroll">
+        @Body
+    </main>
+</div>

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using TutorHub.Web;
@@ -11,19 +12,32 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddTransient<AuthTokenHandler>();
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<IFlowbiteService, FlowbiteService>();
-builder.Services.AddScoped<AuthClient>(sp =>
+builder.Services.AddHttpClient<AuthClient>(client =>
 {
-    var http = new HttpClient
-    {
-        BaseAddress = new Uri("http://localhost:5089/api/")
-    };
-    return new AuthClient(http);
+    client.BaseAddress = new Uri("http://localhost:5089/api/");
 });
 
+builder.Services.AddHttpClient<ApiClient>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5089/api/");
+})
+.AddHttpMessageHandler<AuthTokenHandler>() // <-- ADD YOUR HANDLER HERE
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    UseDefaultCredentials = true
+});
 
+builder.Services.AddScoped<JwtAuthenticationProvider>();
+
+builder.Services.AddScoped<AuthenticationStateProvider>(
+    sp => sp.GetRequiredService<JwtAuthenticationProvider>());
+
+builder.Services.AddAuthorizationCore();
 
 
 await builder.Build().RunAsync();

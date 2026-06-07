@@ -1,4 +1,8 @@
-﻿@inherits LayoutComponentBase
-<div class="min-h-screen w-screen bg-gray-50">
-            @Body
+﻿@using TutorHub.Web.Components
+@inherits LayoutComponentBase
+<div class="min-h-screen w-screen bg-gray-50 overflow-x-hidden ">
+    <div>
+        <MainNavbar />
+    </div>
+  @Body
 </div>

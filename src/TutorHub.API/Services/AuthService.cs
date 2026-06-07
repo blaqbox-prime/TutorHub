@@ -35,6 +35,22 @@ namespace TutorHub.API.Services
             return true;
         }
 
-     
+        public async Task<AppUser> AuthenticateUser(string email, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return null!;
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+            if (!result.Succeeded)
+            {
+                return null!;
+            }
+
+            return user;
+        }
+
     }
 }

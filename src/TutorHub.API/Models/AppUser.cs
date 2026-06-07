@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SharedLibrary.Models;
 
 namespace TutorHub.API.Models
 {

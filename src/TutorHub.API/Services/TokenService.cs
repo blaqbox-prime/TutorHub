@@ -9,21 +9,16 @@ using TutorHub.API.Models;
 
 namespace TutorHub.API.Services;
 
-public class TokenService
+public class TokenService(IConfiguration config, AppDbContext db)
 {
-    private readonly IConfiguration _config;
-    private readonly AppDbContext _db;
-
-    public TokenService(IConfiguration config)
-    {
-        _config = config;
-    }
+    private readonly IConfiguration _config = config;
+    private readonly AppDbContext _db = db;
 
     public string GenerateToken(AppUser user, IList<string> roles)
     {
         var jwtSettings = _config.GetSection("Jwt");
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>
@@ -58,17 +53,16 @@ public class TokenService
     public string RefreshAccessToken(string refreshToken)
     {
         RefreshToken token = _db.RefreshTokens.FirstOrDefault(rt => rt.Token == refreshToken)!;
-        if (token == null || token.IsExpired)
+        if (token?.IsExpired is false)
         {
             throw new SecurityTokenException("Invalid refresh token");
         }
 
         // Generate new access token
-        var user = _db.AppUsers.Find(token.Id)!;
+        var user = _db.AppUsers.Find(token!.Id)!;
         var roles = _db.UserRoles.Where(ur => ur.UserId == user.Id).Select(ur => ur.RoleId).ToList();
         var newAccessToken = GenerateToken(user, roles);
 
-        // Optionally, you can also generate a new refresh token and update the database
         token.Token = GenerateRefreshToken();
         token.Expires = DateTime.UtcNow.AddDays(14);
         _db.SaveChanges();

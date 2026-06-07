@@ -26,66 +26,103 @@ Register a new tutor account.
 ```json
 {
   "fullName": "string",
+  "role": "string",
   "email": "string",
-  "password": "string",
-  "confirmPassword": "string"
+  "password": "string"
 }
 ```
 
-#### Responses
+#### Response
 
-| Status          | Description                                      |
-|-----------------|--------------------------------------------------|
-| 200 OK         | Registration successful; returns JWT + refresh token cookie |
-| 400 Bad Request | Validation error (duplicate email, weak password, mismatch) |
+- `200 OK`: Returns an envelope with `message` and `data` containing `token` and `expiresAt`.
+- `400 Bad Request`: Validation error or duplicate user.
 
 #### Validation Rules
 
-- Email must be unique
-- Password: minimum 8 characters, at least 1 uppercase letter, at least 1 number
-- confirmPassword must match password
+- `fullName`: required, 5-30 characters
+- `role`: required
+- `email`: required, must be a valid email address
+- `password`: required, 8-16 characters
+
+#### Response Schema
+
+```json
+{
+  "message": "Registered Successfully",
+  "data": {
+    "token": "string",
+    "expiresAt": "2026-05-15T15:00:00Z"
+  }
+}
+```
 
 ### `POST /api/auth/login`
 
-Authenticate an existing tutor.
+Authenticate an existing tutor and issue a JWT with a refresh token cookie.
 
 #### Request Body
 
 ```json
 {
   "email": "string",
-  "password": "string",
-  "rememberMe": false
+  "password": "string"
 }
 ```
 
 #### Responses
 
-| Status            | Description                                      |
-|-------------------|--------------------------------------------------|
-| 200 OK           | Login successful; returns JWT + refresh token cookie |
-| 401 Unauthorized | Invalid credentials (generic error message)     |
+| Status            | Description                                                      |
+|-------------------|------------------------------------------------------------------|
+| 200 OK           | Login successful; returns JWT + sets `refreshToken` cookie       |
+| 401 Unauthorized | Invalid email or password                                        |
+| 500 Internal Server Error | Unexpected login failure                                  |
 
-### `POST /api/auth/refresh-token`
+#### Refresh Token Cookie
 
-Silently renew the access token using the refresh token cookie.
+- Cookie name: `refreshToken`
+- HttpOnly: true
+- SameSite: None
+- Path: `/api/auth/refresh`
+- Expires: 7 days
+- Secure: false in development, should be `true` in production
+
+#### Response Schema
+
+```json
+{
+  "message": "Login Successful",
+  "data": {
+    "token": "string",
+    "expiresAt": "2026-05-15T15:00:00Z"
+  }
+}
+```
+
+### `POST /api/auth/refresh`
+
+Renew the access token using the refresh token cookie.
+
+#### Request
+
+- No body required
+- Requires the `refreshToken` cookie to be included
 
 #### Responses
 
-| Status            | Description                                      |
-|-------------------|--------------------------------------------------|
-| 200 OK           | New JWT issued; refresh token rotated           |
-| 401 Unauthorized | Refresh token invalid or revoked                |
+| Status            | Description                                                   |
+|-------------------|---------------------------------------------------------------|
+| 200 OK           | Returns a new access token and expiration timestamp           |
+| 401 Unauthorized | Missing or invalid refresh token                              |
+| 500 Internal Server Error | Token refresh failed                                    |
 
-### `POST /api/auth/logout`
+#### Response Schema
 
-Revoke the refresh token and end the session.
-
-#### Responses
-
-| Status | Description                                      |
-|--------|--------------------------------------------------|
-| 200 OK | Logout successful; refresh token cookie cleared |
+```json
+{
+  "token": "string",
+  "expiresAt": "2026-05-15T15:00:00Z"
+}
+```
 
 ## Students
 
